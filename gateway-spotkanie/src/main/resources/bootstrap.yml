@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: gateway-test
+  profiles:
+    active: dev
+  cloud:
+    config:
+      username: admin
+      password: admin
+      discovery:
+        serviceId: spotkanie-config
+        enabled: true
+    gateway:
+      default-filters:
+        - RewritePath=/eaw-gateway-api/(?<segment>.*), /$\{segment}
+      routes:
+        - id: test-spotkanie
+          uri: lb://test-spotkanie/
+          predicates:
+            - Path=/test-spotkanie/**
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+server:
+  port: 7080

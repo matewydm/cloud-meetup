@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: spotkanie-gateway
+  cloud:
+    gateway:
+      default-filters:
+        - "RewritePath=/eaw-gateway-api/(?<segment>.*), /$\\{segment}"
+      routes:
+        - id: eaw-rest-api
+          uri: https://traficar-api-dev.corelogic.pl/eaw-rest-api/
+          predicates:
+            - Path=/eaw-rest-api/**
+        - id: client
+          uri: lb://test-spotkanie/spotkanie-test/
+          predicates:
+            - Path=/spotkanie-test/**
+
+server:
+  port: 7080
+
+
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
